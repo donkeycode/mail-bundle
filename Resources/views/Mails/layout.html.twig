@@ -1,0 +1,64 @@
+{% set colors = {
+    header_bg: "#2d7cff",
+    header_txt_color: "#ffffff",
+    bg: "#efefef",
+    txt_color: "#555555"
+} %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+</head>
+<body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0" style="-webkit-text-size-adjust: none !important; -ms-text-size-adjust: 100%; height: 100% !important; width: 100% !important; min-width: 100% !important; background-color: {{ colors.bg }}; margin: 0; padding: 0;" bgcolor="{{ colors.bg }}">
+<center>
+    <table align="center" border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" style="-webkit-text-size-adjust: none !important; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-collapse: collapse !important; height: 100% !important; width: 100% !important; background-color: {{ colors.bg }}; margin: 0; padding: 0;" bgcolor="{{ colors.bg }}">
+        <tr>
+            <td align="center" valign="top" style="-webkit-text-size-adjust: none !important; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; height: 100% !important; width: 100% !important; margin: 0; padding: 20px 10px;">
+
+                <table border="0" cellpadding="0" cellspacing="0" style="-webkit-text-size-adjust: none !important; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-collapse: collapse !important; width: 100% !important; max-width: 600px !important;">
+                    <tr>
+                        <td align="center" valign="top" style="-webkit-text-size-adjust: none !important; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="-webkit-text-size-adjust: none !important; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-collapse: collapse !important; background-color: transparent;" bgcolor="transparent">
+                                <tr>
+                                    <td valign="top" style="-webkit-text-size-adjust: none !important; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; color: #505050; font-family: Helvetica Neue; font-size: 0; font-weight: bold; line-height: 100%; text-align: left; vertical-align: middle; border-radius: 4px 4px 0 0; -moz-border-radius: 4px 4px 0 0; background-color: {{ colors.header_bg }}; padding: 20px;" align="left" bgcolor="{{ colors.header_bg }}">
+                                         <h2 style="color: {{ colors.header_txt_color }} !important; display: block; font-family: Helvetica Neue; font-weight: 300; font-size: 18px !important; font-style: normal; line-height: 100%; letter-spacing: normal; margin: 0;">{% block title %}{% endblock %}</h2>
+
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center" valign="top" style="-webkit-text-size-adjust: none !important; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="-webkit-text-size-adjust: none !important; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-collapse: collapse !important; border-radius: 0 0 4px 4px; -moz-border-radius: 0 0 4px 4px; background-color: #FFFFFF;" bgcolor="#FFFFFF">
+                                <tr>
+                                    <td valign="top" mc:edit="body_content00" style="-webkit-text-size-adjust: none !important; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; color: {{ colors.txt_color }}; font-family: Helvetica Neue; font-weight: 300; font-size: 14px; line-height: 150%; text-align: left; padding: 30px 20px;" align="left">
+                                        {% block content %}{% endblock %}
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center" valign="top" style="-webkit-text-size-adjust: none !important; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="-webkit-text-size-adjust: none !important; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-collapse: collapse !important; background-color: transparent;" bgcolor="transparent">
+                                <tr>
+                                    <td valign="top" mc:edit="footer_content01" style="-webkit-text-size-adjust: none !important; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; color: {{ colors.txt_color }}; font-family: Helvetica Neue; font-weight: 300; font-size: 14px; line-height: 150%; text-align: center; padding: 20px;" align="center">
+                                        {% block signature %}© DonkeyCode{% endblock %}
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</center>
+
+</body>
+</html>
