@@ -1,24 +1,64 @@
+# MailBundle
+
+An easy way to send mail with twig and swift
+
+## Setup
+
+````
+composer require donkeycode/mail-bundle
+````
+
+Add in `AppKernel.php`
+
+````
+new DonkeyCode\MailBundle\DonkeyCodeMailBundle(),
+````
+
+## Configuration
+
+````
+donkey_code_mail:
+    mail_from: null
+    reply_to: null
+    options:
+        header_bg: '#2d7cff'
+        header_txt_color: '#ffffff'
+        bg: '#efefef'
+        txt_color: '#555555'
+````
+
+
+## Usage
+
+Create your twig
+
+
+````
 {% block subject %}
-Réinitialisation mot de passe espace Cleany
+Subject of mail
 {% endblock %}
 
 {% block body %}
-    {% embed "CleanyMailBundle:Mails:layout.html.twig" %}
-        {% block title %}Réinitialisation mot de passe espace Cleany{% endblock %}
+    {% embed "DonkeyCodeMailBundle:Mails:layout.html.twig" %}
+        {% block title %}Header{% endblock %}
         {% block content %}
-            Cher client,<br />
-            <br />
-            Vous avez demandé la réinitialisation de votre mot de passe.<br />
-            Cliquez sur ce lien pour le réinitialiser : <a href="{{ front_url("reset", { token: user.confirmationToken } )}}
-">{{ front_url("reset", { token: user.confirmationToken } )}}</a><br />
-            <br />
-            N'oubliez pas, vous pouvez retrouver à tout moment dans votre <a href="{{ front_url("home" )}}
-">espace Cleany</a>, le planning de votre agent, les contacts de nos équipes et l'historique de toutes les factures.<br />
-            <br />
-            Bonne journée !<br />
-            <br />
-            L'équipe Cleany<br />
+            Body Of mail
         {% endblock %}
 
     {% endembed %}
 {% endblock %}
+````
+
+Send it simply
+
+````
+$mailer = $this->getContainer()
+    ->get('donkeycode.mailer')
+    ->createMessage()
+    ->setTemplate('YourBundle:Mails:invoices.html.twig', [
+        'invoices' => $invoices,
+    ])
+    ->setTo($destMail)
+    ->send();
+````
+

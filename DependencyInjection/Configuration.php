@@ -32,7 +32,7 @@ class Configuration implements ConfigurationInterface
                         'bg'               => "#efefef",
                         'txt_color'        => "#555555"
                     ))
-                ->end();
+                ->end()
             ->end()
             ;
 

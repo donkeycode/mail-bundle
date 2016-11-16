@@ -9,13 +9,15 @@ class Mailer
     private $from;
     private $logo_url;
     private $message;
+    private $options;
 
-    public function __construct(\Swift_Mailer $swift, \Twig_Environment $twig, $from, $replyTo)
+    public function __construct(\Swift_Mailer $swift, \Twig_Environment $twig, $from, $replyTo, array $options)
     {
         $this->swift = $swift;
         $this->twig = $twig;
         $this->from = $from;
         $this->replyTo = $replyTo;
+        $this->options = $options;
     }
 
     /**
@@ -53,7 +55,7 @@ class Mailer
      */
     public function setTemplate($templateName, array $vars = array())
     {
-        $vars = array_merge($vars, $this->twig->getGlobals());
+        $vars = array_merge($vars, $this->twig->getGlobals(), [ 'donkeycode_mail' => $this->options ]);
 
         // Load the template
         $template = $this->twig->loadTemplate($templateName);
