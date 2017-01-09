@@ -30,7 +30,8 @@ class Configuration implements ConfigurationInterface
                         'header_bg'        => "#2d7cff",
                         'header_txt_color' => "#ffffff",
                         'bg'               => "#efefef",
-                        'txt_color'        => "#555555"
+                        'txt_color'        => "#555555",
+                        "font_family"      => "Helvetica Neue"
                     ))
                 ->end()
             ->end()
