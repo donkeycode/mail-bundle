@@ -18,8 +18,8 @@
 
                             <table border="0" cellpadding="0" cellspacing="0" width="100%" style="-webkit-text-size-adjust: none !important; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-collapse: collapse !important; background-color: transparent;" bgcolor="transparent">
                                 <tr>
-                                    <td valign="top" style="-webkit-text-size-adjust: none !important; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; color: #505050; font-family: Helvetica Neue; font-size: 0; font-weight: bold; line-height: 100%; text-align: left; vertical-align: middle; border-radius: 4px 4px 0 0; -moz-border-radius: 4px 4px 0 0; background-color: {{ colors.header_bg }}; padding: 20px;" align="left" bgcolor="{{ colors.header_bg }}">
-                                         <h2 style="color: {{ colors.header_txt_color }} !important; display: block; font-family: Helvetica Neue; font-weight: 300; font-size: 18px !important; font-style: normal; line-height: 100%; letter-spacing: normal; margin: 0;">{% block title %}{% endblock %}</h2>
+                                    <td valign="top" style="-webkit-text-size-adjust: none !important; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; color: #505050; font-family: {{ colors.font_family }}; font-size: 0; font-weight: bold; line-height: 100%; text-align: left; vertical-align: middle; border-radius: 4px 4px 0 0; -moz-border-radius: 4px 4px 0 0; background-color: {{ colors.header_bg }}; padding: 20px;" align="left" bgcolor="{{ colors.header_bg }}">
+                                         <h2 style="color: {{ colors.header_txt_color }} !important; display: block; font-family: {{ colors.font_family }}; font-weight: 300; font-size: 18px !important; font-style: normal; line-height: 100%; letter-spacing: normal; margin: 0;">{% block title %}{% endblock %}</h2>
 
                                     </td>
                                 </tr>
@@ -31,7 +31,7 @@
 
                             <table border="0" cellpadding="0" cellspacing="0" width="100%" style="-webkit-text-size-adjust: none !important; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-collapse: collapse !important; border-radius: 0 0 4px 4px; -moz-border-radius: 0 0 4px 4px; background-color: #FFFFFF;" bgcolor="#FFFFFF">
                                 <tr>
-                                    <td valign="top" mc:edit="body_content00" style="-webkit-text-size-adjust: none !important; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; color: {{ colors.txt_color }}; font-family: Helvetica Neue; font-weight: 300; font-size: 14px; line-height: 150%; text-align: left; padding: 30px 20px;" align="left">
+                                    <td valign="top" mc:edit="body_content00" style="-webkit-text-size-adjust: none !important; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; color: {{ colors.txt_color }}; font-family: {{ colors.font_family }}; font-weight: 300; font-size: 14px; line-height: 150%; text-align: left; padding: 30px 20px;" align="left">
                                         {% block content %}{% endblock %}
                                     </td>
                                 </tr>
@@ -43,7 +43,7 @@
 
                             <table border="0" cellpadding="0" cellspacing="0" width="100%" style="-webkit-text-size-adjust: none !important; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-collapse: collapse !important; background-color: transparent;" bgcolor="transparent">
                                 <tr>
-                                    <td valign="top" mc:edit="footer_content01" style="-webkit-text-size-adjust: none !important; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; color: {{ colors.txt_color }}; font-family: Helvetica Neue; font-weight: 300; font-size: 14px; line-height: 150%; text-align: center; padding: 20px;" align="center">
+                                    <td valign="top" mc:edit="footer_content01" style="-webkit-text-size-adjust: none !important; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; color: {{ colors.txt_color }}; font-family: {{ colors.font_family }}; font-weight: 300; font-size: 14px; line-height: 150%; text-align: center; padding: 20px;" align="center">
                                         {% block signature %}{% endblock %}
                                     </td>
                                 </tr>
