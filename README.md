@@ -25,6 +25,7 @@ donkey_code_mail:
         header_txt_color: '#ffffff'
         bg: '#efefef'
         txt_color: '#555555'
+        font_family: 'Helvetica Neue'
 ````
 
 
