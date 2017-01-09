@@ -61,7 +61,7 @@ class Mailer
         $template = $this->twig->loadTemplate($templateName);
 
         if ($template->hasBlock('subject')) {
-            $this->getMessage()->setSubject($template->renderBlock('subject', $vars));
+            $this->getMessage()->setSubject(trim($template->renderBlock('subject', $vars)));
         }
 
         if ($template->hasBlock('body')) {
