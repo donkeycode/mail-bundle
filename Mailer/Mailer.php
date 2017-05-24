@@ -60,31 +60,31 @@ class Mailer
         // Load the template
         $template = $this->twig->loadTemplate($templateName);
 
-        if ($template->hasBlock('subject')) {
+        if ($template->hasBlock('subject', [])) {
             $this->getMessage()->setSubject(trim($template->renderBlock('subject', $vars)));
         }
 
-        if ($template->hasBlock('body')) {
+        if ($template->hasBlock('body', [])) {
             $body = $template->renderBlock('body', $vars);
             $this->getMessage()->setBody($body, 'text/html');
 
-            if (!$template->hasBlock('text')) {
+            if (!$template->hasBlock('text', [])) {
                 $this->getMessage()->addPart($this->html2txt($body), 'text/plain');
             }
         }
 
-        if ($template->hasBlock('text')) {
+        if ($template->hasBlock('text', [])) {
             $text = $template->renderBlock('text', $vars);
 
-            if (!$template->hasBlock('body')) {
+            if (!$template->hasBlock('body', [])) {
                 $this->getMessage()->setBody($text, 'text/plain');
             } else {
                 $this->getMessage()->addPart($this->html2txt($text), 'text/plain');
             }
         }
 
-        if ($template->hasBlock('from_email')) {
-            if ($template->hasBlock('from_name')) {
+        if ($template->hasBlock('from_email', [])) {
+            if ($template->hasBlock('from_name', [])) {
                 $this->getMessage()->setFrom([
                     $template->renderBlock('from_email', $vars) => $template->renderBlock('from_name', $vars),
                 ]);
@@ -93,7 +93,7 @@ class Mailer
             }
         }
 
-        if ($template->hasBlock('reply_to')) {
+        if ($template->hasBlock('reply_to', [])) {
             $this->getMessage()->setReplyTo($template->renderBlock('reply_to', $vars));
         }
 
