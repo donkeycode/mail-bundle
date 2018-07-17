@@ -25,7 +25,7 @@ class Mailer
      */
     public function createMessage()
     {
-        $this->message = \Swift_Message::newInstance();
+        $this->message = new \Swift_Message();
 
         $this->message->setFrom($this->from);
         $this->message->setReplyTo($this->replyTo);
