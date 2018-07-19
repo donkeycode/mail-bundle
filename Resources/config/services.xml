@@ -9,7 +9,7 @@
     </parameters>
 
     <services>
-        <service id="donkeycode.mailer" class="%donkeycode.mailer.class%">
+        <service id="donkeycode.mailer" class="%donkeycode.mailer.class%" public="true">
             <argument type="service" id="swiftmailer.mailer" />
             <argument type="service" id="twig" />
             <argument></argument> <!-- mailer_from -->
