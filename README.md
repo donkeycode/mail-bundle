@@ -41,6 +41,8 @@ Subject of mail
 
 {% block body %}
     {% embed "DonkeyCodeMailBundle:Mails:layout.html.twig" %}
+    {# For sf4 #}
+    {% embed "@DonkeyCodeMail/mails/layout.html.twig" %}
         {% block title %}Header{% endblock %}
         {% block content %}
             Body Of mail
@@ -49,6 +51,8 @@ Subject of mail
     {% endembed %}
 {% endblock %}
 ````
+
+
 
 Send it simply
 
