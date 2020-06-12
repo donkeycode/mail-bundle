@@ -11,7 +11,10 @@ class Mailer
     private $message;
     private $options;
 
-    public function __construct(\Swift_Mailer $swift, \Twig_Environment $twig, $from, $replyTo, array $options)
+    /**
+    * $twig : Twig_Environment or \Twig\Environment
+    */
+    public function __construct(\Swift_Mailer $swift, $twig, $from, $replyTo, array $options)
     {
         $this->swift = $swift;
         $this->twig = $twig;
