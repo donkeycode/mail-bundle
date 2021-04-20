@@ -61,7 +61,7 @@ class Mailer
         $vars = array_merge($vars, $this->twig->getGlobals(), [ 'donkeycode_mail' => $this->options ]);
 
         // Load the template
-        $template = $this->twig->loadTemplate($templateName, $templateName);
+        $template = $this->twig->load($templateName);
 
         if ($template->hasBlock('subject', [])) {
             $this->getMessage()->setSubject(trim($template->renderBlock('subject', $vars)));
