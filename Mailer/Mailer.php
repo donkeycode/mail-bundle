@@ -100,6 +100,17 @@ class Mailer
             $this->getMessage()->setReplyTo($template->renderBlock('reply_to', $vars));
         }
 
+        if ($template->hasBlock('cid')) {
+            $body = $template->renderBlock('body', $vars);
+            $cids = explode(',', $template->renderBlock('cid', $vars));
+            foreach ($cids as $key=>$cid) {
+                $img_data = file_get_contents($cid);
+                $cidToEmbed = $this->getMessage()->embed(\Swift_Image::newInstance($img_data, $key.'.png', mime_content_type($cid)));
+                $body = str_replace("{cid}[" . $key . "]", $cidToEmbed, $body);
+            }
+            $this->getMessage()->setBody($body, 'text/html');
+        }
+        
         return $this;
     }
 
