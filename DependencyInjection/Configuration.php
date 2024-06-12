@@ -14,8 +14,13 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode    = $treeBuilder->root('donkey_code_mail');
+        $treeBuilder = new TreeBuilder('donkey_code_mail');
+
+        if (method_exists($treeBuilder, 'getRootNode')) {
+            $rootNode = $treeBuilder->getRootNode();
+        } else {
+            $rootNode = $treeBuilder->root('donkey_code_mail');
+        }
 
         $rootNode
             ->children()
