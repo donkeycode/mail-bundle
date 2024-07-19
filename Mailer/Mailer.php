@@ -2,21 +2,23 @@
 
 namespace DonkeyCode\MailBundle\Mailer;
 
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
+use Symfony\Component\Mime\Address;
+use Twig\Environment;
+
 class Mailer
 {
-    private $swift;
+    private $mailer;
     private $twig;
     private $from;
-    private $logo_url;
+    private $replyTo;
     private $message;
     private $options;
 
-    /**
-    * $twig : Twig_Environment or \Twig\Environment
-    */
-    public function __construct(\Swift_Mailer $swift, $twig, $from, $replyTo, array $options)
+    public function __construct(MailerInterface $mailer, Environment $twig, string $from, string $replyTo, array $options)
     {
-        $this->swift = $swift;
+        $this->mailer = $mailer;
         $this->twig = $twig;
         $this->from = $from;
         $this->replyTo = $replyTo;
@@ -28,18 +30,17 @@ class Mailer
      */
     public function createMessage()
     {
-        $this->message = new \Swift_Message();
-
-        $this->message->setFrom($this->from);
-        $this->message->setReplyTo($this->replyTo);
+        $this->message = (new Email())
+            ->from($this->from)
+            ->replyTo($this->replyTo);
 
         return $this;
     }
 
     /**
-     * @return \Swift_Message
+     * @return Email
      */
-    public function getMessage()
+    public function getMessage(): Email
     {
         if (!$this->message) {
             $this->createMessage();
@@ -56,7 +57,7 @@ class Mailer
      *
      * @return $this
      */
-    public function setTemplate($templateName, array $vars = array())
+    public function setTemplate(string $templateName, array $vars = []): self
     {
         $vars = array_merge($vars, $this->twig->getGlobals(), [ 'donkeycode_mail' => $this->options ]);
 
@@ -64,15 +65,15 @@ class Mailer
         $template = $this->twig->load($templateName);
 
         if ($template->hasBlock('subject', [])) {
-            $this->getMessage()->setSubject(trim($template->renderBlock('subject', $vars)));
+            $this->getMessage()->subject(trim($template->renderBlock('subject', $vars)));
         }
 
         if ($template->hasBlock('body', [])) {
             $body = $template->renderBlock('body', $vars);
-            $this->getMessage()->setBody($body, 'text/html');
+            $this->getMessage()->html($body);
 
             if (!$template->hasBlock('text', [])) {
-                $this->getMessage()->addPart($this->html2txt($body), 'text/plain');
+                $this->getMessage()->text($this->html2txt($body));
             }
         }
 
@@ -80,70 +81,68 @@ class Mailer
             $text = $template->renderBlock('text', $vars);
 
             if (!$template->hasBlock('body', [])) {
-                $this->getMessage()->setBody($text, 'text/plain');
+                $this->getMessage()->text($text);
             } else {
-                $this->getMessage()->addPart($this->html2txt($text), 'text/plain');
+                $this->getMessage()->text($this->html2txt($text));
             }
         }
 
         if ($template->hasBlock('from_email', [])) {
             if ($template->hasBlock('from_name', [])) {
-                $this->getMessage()->setFrom([
-                    $template->renderBlock('from_email', $vars) => $template->renderBlock('from_name', $vars),
-                ]);
+                $this->getMessage()->from(new Address($template->renderBlock('from_email', $vars), $template->renderBlock('from_name', $vars)));
             } else {
-                $this->getMessage()->setFrom($template->renderBlock('from_email', $vars));
+                $this->getMessage()->from($template->renderBlock('from_email', $vars));
             }
         }
 
         if ($template->hasBlock('reply_to', [])) {
-            $this->getMessage()->setReplyTo($template->renderBlock('reply_to', $vars));
+            $this->getMessage()->replyTo($template->renderBlock('reply_to', $vars));
         }
 
         return $this;
     }
 
     /**
-     * @param array[\Swift_Attachment] $attachments
+     * @param array $attachments
      *
      * @return $this
      */
-    public function attachArray(array $attachments)
+    public function attachArray(array $attachments): self
     {
         foreach ($attachments as $attachment) {
-            $this->getMessage()->attach($attachment);
+            $this->getMessage()->attachFromPath($attachment);
         }
 
         return $this;
     }
 
     /**
-     * @see \Swift_Mailer::send()
+     * @see send()
      */
     public function send()
     {
-        return $this->swift->send($this->getMessage());
+        $this->mailer->send($this->getMessage());
     }
 
     /**
-     * Give the hand to \Swift_Message functions.
+     * Give the hand to Email functions.
      *
      * @param string $method
      * @param array  $args
      *
      * @return $this
      */
-    public function __call($method, array $args = array())
+    public function __call(string $method, array $args = [])
     {
-        call_user_func_array(array($this->getMessage(), $method), $args);
+        call_user_func_array([$this->getMessage(), $method], $args);
 
         return $this;
     }
 
-    private function html2txt($document)
+    private function html2txt(string $document): string
     {
         $parts = explode('</style>', $document, 2);
 
-        return str_replace('&#13;', '', strip_tags($parts[sizeof($parts) - 1]));
+        return str_replace('&#13;', '', strip_tags($parts[count($parts) - 1]));
     }
 }

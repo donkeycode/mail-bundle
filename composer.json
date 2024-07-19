@@ -1,10 +1,10 @@
 {
     "name": "donkeycode/mail-bundle",
-    "description": "An easy way to send mail with swiftmailer and twig",
+    "description": "An easy way to send mail with mailer and twig",
     "type": "symfony-bundle",
     "require": {
         "twig/twig": "*",
-        "swiftmailer/swiftmailer": "*"
+        "symfony/mailer": "*"
     },
     "license": "MIT",
     "authors": [
@@ -17,5 +17,8 @@
         "psr-4": {
             "DonkeyCode\\MailBundle\\": ""
         }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.5"
     }
 }

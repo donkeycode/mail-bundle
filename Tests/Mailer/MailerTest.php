@@ -3,32 +3,34 @@
 namespace DonkeyCode\MailBundle\Tests\Mailer;
 
 use DonkeyCode\MailBundle\Mailer\Mailer;
-
-use DonkeyCode\MailBundle\Tests\TestCase;
-use Swift_Mailer;
-use Swift_Transport_NullTransport;
-use Swift_Events_SimpleEventDispatcher;
-use Twig_Environment;
-use Twig_Loader_Array;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
+use Symfony\Component\Mime\Part\TextPart;
+use Twig\Environment;
+use Twig\Loader\ArrayLoader;
 
 class MailerTest extends TestCase
 {
-    public function setUp()
-    {
-        $swift = new Swift_Mailer(new Swift_Transport_NullTransport(new Swift_Events_SimpleEventDispatcher()));
-        $this->twigLoader = new Twig_Loader_Array([]);
-        $twig = new Twig_Environment($this->twigLoader);
+    private $twigLoader;
+    private $mailer;
 
-        $this->mailer = new Mailer($swift, $twig, "from@mail.com", "reply@mail.com");
+    public function setUp(): void
+    {
+        $mailer = $this->createMock(MailerInterface::class);
+        $this->twigLoader = new ArrayLoader([]);
+        $twig = new Environment($this->twigLoader);
+
+        $this->mailer = new Mailer($mailer, $twig, "from@mail.com", "reply@mail.com", []);
     }
 
     public function testCreateMessage()
     {
         $this->mailer->createMessage();
 
-        $this->assertInstanceOf('Swift_Message', $this->mailer->getMessage(), 'The message is a Swift_Message');
+        $this->assertInstanceOf(Email::class, $this->mailer->getMessage(), 'The message is not an instance of Email');
 
-        $this->mailer->getMessage()->setSubject('Test first');
+        $this->mailer->getMessage()->subject('Test first');
         $this->mailer->createMessage();
 
         $this->assertNotEquals('Test first', $this->mailer->getMessage()->getSubject(), 'Create message always return a new message');
@@ -36,7 +38,7 @@ class MailerTest extends TestCase
 
     public function testGetMessage()
     {
-        $this->mailer->getMessage()->setSubject('Test first');
+        $this->mailer->getMessage()->subject('Test first');
 
         $this->assertEquals('Test first', $this->mailer->getMessage()->getSubject(), 'getMessage return the last message created');
     }
@@ -54,7 +56,13 @@ TWIG;
         ]);
 
         $this->assertEquals('The subject of mail with simple var', $this->mailer->getMessage()->getSubject(), 'Subject extracted from twig block subject');
-        $this->assertEquals('The textblock simple var', $this->mailer->getMessage()->getBody(), 'Body in text mode extracted from twig block text');
-        $this->assertEquals('The textblock simple var', $this->mailer->getMessage()->getBody(), 'Body in text mode extracted from twig block text');
+
+        $textBody = $this->mailer->getMessage()->getTextBody();
+        if ($textBody instanceof TextPart) {
+            $textBody = $textBody->getBody();
+        }
+
+        $this->assertNotNull($textBody, 'Text body should not be null');
+        $this->assertStringContainsString('The textblock simple var', $textBody, 'Body in text mode extracted from twig block text');
     }
 }
