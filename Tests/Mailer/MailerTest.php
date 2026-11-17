@@ -8,18 +8,21 @@ use DonkeyCode\MailBundle\Tests\TestCase;
 use Swift_Mailer;
 use Swift_Transport_NullTransport;
 use Swift_Events_SimpleEventDispatcher;
-use Twig_Environment;
-use Twig_Loader_Array;
+use Twig\Environment;
+use Twig\Loader\ArrayLoader;
 
 class MailerTest extends TestCase
 {
-    public function setUp()
+    private $twigLoader;
+    private $mailer;
+
+    public function setUp(): void
     {
         $swift = new Swift_Mailer(new Swift_Transport_NullTransport(new Swift_Events_SimpleEventDispatcher()));
-        $this->twigLoader = new Twig_Loader_Array([]);
-        $twig = new Twig_Environment($this->twigLoader);
+        $this->twigLoader = new ArrayLoader([]);
+        $twig = new Environment($this->twigLoader);
 
-        $this->mailer = new Mailer($swift, $twig, "from@mail.com", "reply@mail.com");
+        $this->mailer = new Mailer($swift, $twig, "from@mail.com", "reply@mail.com", []);
     }
 
     public function testCreateMessage()
@@ -55,6 +58,28 @@ TWIG;
 
         $this->assertEquals('The subject of mail with simple var', $this->mailer->getMessage()->getSubject(), 'Subject extracted from twig block subject');
         $this->assertEquals('The textblock simple var', $this->mailer->getMessage()->getBody(), 'Body in text mode extracted from twig block text');
-        $this->assertEquals('The textblock simple var', $this->mailer->getMessage()->getBody(), 'Body in text mode extracted from twig block text');
+    }
+
+    public function testSetTemplateWithSubjectAndHtmlBody()
+    {
+        $tpl = <<<TWIG
+{% block subject %}Hello {{ var }}{% endblock %}
+{% block body %}<p>Body {{ var }} {{ donkeycode_mail.bg|default('none') }}</p>{% endblock %}
+TWIG;
+        $this->twigLoader->setTemplate('test_html', $tpl);
+
+        $this->mailer->setTemplate('test_html', ['var' => 'world']);
+
+        $message = $this->mailer->getMessage();
+
+        $this->assertEquals('Hello world', $message->getSubject());
+        $this->assertEquals('<p>Body world none</p>', $message->getBody());
+        $this->assertEquals('text/html', $message->getBodyContentType());
+        $this->assertEquals(['from@mail.com' => null], $message->getFrom());
+        $this->assertEquals(['reply@mail.com' => null], $message->getReplyTo());
+
+        $parts = $message->getChildren();
+        $this->assertCount(1, $parts, 'A text/plain alternative is generated from the html body');
+        $this->assertEquals('Body world none', $parts[0]->getBody());
     }
 }

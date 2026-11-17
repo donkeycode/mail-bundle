@@ -7,6 +7,7 @@ class Mailer
     private $swift;
     private $twig;
     private $from;
+    private $replyTo;
     private $logo_url;
     private $message;
     private $options;
