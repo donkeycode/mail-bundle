@@ -16,7 +16,7 @@ class Mailer
     private $message;
     private $options;
 
-    public function __construct(MailerInterface $mailer, Environment $twig, string $from, string $replyTo, array $options)
+    public function __construct(MailerInterface $mailer, Environment $twig, ?string $from, ?string $replyTo, array $options)
     {
         $this->mailer = $mailer;
         $this->twig = $twig;
@@ -30,9 +30,15 @@ class Mailer
      */
     public function createMessage()
     {
-        $this->message = (new Email())
-            ->from($this->from)
-            ->replyTo($this->replyTo);
+        $this->message = new Email();
+
+        if (null !== $this->from) {
+            $this->message->from($this->from);
+        }
+
+        if (null !== $this->replyTo) {
+            $this->message->replyTo($this->replyTo);
+        }
 
         return $this;
     }
@@ -127,6 +133,9 @@ class Mailer
     /**
      * Give the hand to Email functions.
      *
+     * Les noms hérités de SwiftMailer (setTo, setSubject, ...) restent acceptés,
+     * et les adresses peuvent être données sous forme de tableau.
+     *
      * @param string $method
      * @param array  $args
      *
@@ -134,9 +143,30 @@ class Mailer
      */
     public function __call(string $method, array $args = [])
     {
+        if (0 === strpos($method, 'set') && strlen($method) > 3) {
+            $method = lcfirst(substr($method, 3));
+        }
+
+        if (in_array($method, ['to', 'cc', 'bcc', 'from', 'replyTo'], true)) {
+            $args = $this->flattenAddresses($args);
+        }
+
         call_user_func_array([$this->getMessage(), $method], $args);
 
         return $this;
+    }
+
+    private function flattenAddresses(array $args): array
+    {
+        $addresses = [];
+        foreach ($args as $arg) {
+            foreach ((array) $arg as $key => $value) {
+                // format SwiftMailer ['adresse' => 'nom']
+                $addresses[] = is_string($key) ? new Address($key, (string) $value) : $value;
+            }
+        }
+
+        return $addresses;
     }
 
     private function html2txt(string $document): string

@@ -1,10 +1,15 @@
 {
     "name": "donkeycode/mail-bundle",
-    "description": "An easy way to send mail with mailer and twig",
+    "description": "An easy way to send mail with symfony/mailer and twig",
     "type": "symfony-bundle",
     "require": {
-        "twig/twig": "*",
-        "symfony/mailer": "*"
+        "php": ">=8.1",
+        "symfony/config": "^5.4|^6.4|^7.4",
+        "symfony/dependency-injection": "^5.4|^6.4|^7.4",
+        "symfony/http-kernel": "^5.4|^6.4|^7.4",
+        "symfony/mailer": "^5.4|^6.4|^7.4",
+        "symfony/mime": "^5.4|^6.4|^7.4",
+        "twig/twig": "^3.0"
     },
     "license": "MIT",
     "authors": [

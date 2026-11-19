@@ -65,4 +65,22 @@ TWIG;
         $this->assertNotNull($textBody, 'Text body should not be null');
         $this->assertStringContainsString('The textblock simple var', $textBody, 'Body in text mode extracted from twig block text');
     }
+
+    public function testSwiftMailerStyleCalls()
+    {
+        $this->mailer->createMessage()
+            ->setTo(['a@mail.com', 'b@mail.com'])
+            ->setSubject('Sujet');
+
+        $to = array_map(fn ($a) => $a->getAddress(), $this->mailer->getMessage()->getTo());
+        $this->assertEquals(['a@mail.com', 'b@mail.com'], $to);
+        $this->assertEquals('Sujet', $this->mailer->getMessage()->getSubject());
+    }
+
+    public function testNullReplyTo()
+    {
+        $mailer = new Mailer($this->createMock(MailerInterface::class), new Environment($this->twigLoader), 'from@mail.com', null, []);
+
+        $this->assertEmpty($mailer->createMessage()->getMessage()->getReplyTo());
+    }
 }
